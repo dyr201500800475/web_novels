@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}小黑阅读站|首页{% endblock title %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/indexStyle.css' %}">
+{% endblock header %}
+{% block content %}
+    <div class="recommend-container">
+        <ul class="recommend-ul">
+            {% for novel_info in novels_info %}
+                <li>
+                    <a target="_blank" href="{% url 'novels:novel_detail' novel_info.novel.pk %}" 
+                    title="{{ novel_info.novel.novel_name }}" class="novel-image-border">
+                        <img class="novel-image" src="{{ novel_info.image }}" alt="配图" 
+                        onerror="this.src='{% static "image/nocover.jpg" %}'">
+                    </a>
+                    <img src="
+                               {% if novel_info.state == '连载' %}
+                               {% static 'image/only2.png' %}
+                               {% else %}
+                               {% static 'image/only.png' %}
+                               {% endif %}"
+                         class="state-image">
+                    <div class="novel-info">
+                        <a target="_blank" href="{% url 'novels:novel_detail' novel_info.novel.pk %}" title="{{ novel_info.novel.novel_name }}" class="novel-name">
+                            {{ novel_info.novel.novel_name }}
+                        </a>
+                        <a target="_blank" href="{% url 'novels:type' novel_info.novel.novel_type.pk %}" class="novel-type">
+                            类别：<span>{{ novel_info.novel.novel_type.type_name }}</span>
+                        </a>
+                        <a class="novel-author" title="{{ novel_info.author }}">
+                            作者：<span>{{ novel_info.author }}</span>
+                        </a>
+                    </div>
+                    
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="novel-type-container">
+        <div class="touch-nav">
+            <span class="nav-title">精彩推荐：</span>
+            <ul class="nav-title-ul">
+                <li class="hover" id="title_1" onmouseover="changeTab('title',1,5)">玄幻魔法</li>
+                <li id="title_2" onmouseover="changeTab('title',2,5)">武侠修真</li>
+                <li id="title_3" onmouseover="changeTab('title',3,5)">都市言情</li>
+                <li id="title_4" onmouseover="changeTab('title',4,5)">职场校园</li>
+                <li id="title_5" onmouseover="changeTab('title',5,5)">穿越重生</li>
+            </ul>
+        </div>
+        {% for novels_info in novels_types_info %}
+            <div class="con-div" id="title_con_{{ forloop.counter }}" 
+            style="display: {% if forloop.counter == 1 %}
+                                block
+                            {% else %}
+                                none
+                            {% endif %}">
+                <ul class="con-ul">
+                    {% for novel_info in novels_info %}
+                        <li>
+                            <div class="con-novel">
+                                <a target="_blank" href="{% url 'novels:novel_detail' novel_info.novel.pk %}" 
+                                title="{{ novel_info.novel.novel_name }}">
+                                    <img src="{{ novel_info.image }}" class="con-novel-image" 
+                                    onerror="this.src='{% static "image/nocover.jpg" %}'">
+                                </a>
+                                <img src="
+                                       {% if novel_info.state == '连载' %}
+                                       {% static 'image/only2.png' %}
+                                       {% else %}
+                                       {% static 'image/only.png' %}
+                                       {% endif %}"
+                                    class="state-image1">
+                                <div class="con-novel-info">
+                                    <a target="_blank" 
+                                    href="{% url 'novels:novel_detail' novel_info.novel.pk %}" 
+                                    title="{{ novel_info.novel.novel_name }}" 
+                                    class="con-novel-name">
+                                        {{ novel_info.novel.novel_name }}
+                                    </a>
+                                    <span class="con-novel-author">
+                                        作者：{{ novel_info.author }}
+                                    </span>
+                                    <span class="con-novel-des">{{ novel_info.description }}</span>
+                                    <a target="_blank" href="{% url 'novels:novel_detail' novel_info.novel.pk %}" class="btn btn-primary readTo"
+                                    title="{{ novel_info.novel.novel_name }}">马上阅读</a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>  
+        {% endfor %}
+    </div>
+    <div class="listContainer">
+        <div class="row">
+            <div class="col-xs-7">
+                <div class="updateList">
+                    <div class="update-head">
+                        <span class="update-title">刚刚更新的：</span>
+                    </div>
+                    <div class="update-body">
+                        {% for novel_info in novels_last_update %}
+                            <div class="last-update-novel-info">
+                                <ul class="last-update-ul">
+                                    <li>
+                                        <a class="update-novel-name" target="_blank" 
+                                        href="{% url 'novels:novel_detail' novel_info.novel.pk %}">
+                                            {{ novel_info.novel.novel_name }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <span class="last-update-time">
+                                            更新时间：{{ novel_info.last_update_time }}
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="last-update-author">
+                                            {{ novel_info.author }}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% empty %}
+                            暂无更新
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5">
+                <div class="likeList">
+                    <div class="like-head">
+                        <span class="like-title">点赞排行榜：</span>
+                    </div>
+                    <div class="like-body">
+                        {% for novel_like in novels_like_list %}
+                            <div class="novel-like-record-info">
+                                <ul class="novel-like-ul">
+                                    <li>
+                                        <a class="novel-like-name" target="_blank" 
+                                        href="{% url 'novels:novel_detail' novel_like.content_object.pk %}">
+                                            {{ novel_like.content_object.novel_name }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <span class="novel-like-num">
+                                            点赞数：{{ novel_like.liked_num }}
+                                        </span>
+                                    </li> 
+                                </ul>
+                            </div>
+                        {% empty %}
+                            暂无点赞记录
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        @小黑你好
+    </div>
+{% endblock content %}
+
+{% block script_extends %}
+    <script>
+        function changeTab(name, i, a) {
+            for (v = 1; v <= a; v++) {
+                var til = document.getElementById(name + "_" + v)
+                var con = document.getElementById(name + "_con_" + v)
+                til.className = v == i ? 'hover' : '';
+                con.style.display = v == i ? 'block' : 'none'
+            }
+        }
+    </script>
+{% endblock %}

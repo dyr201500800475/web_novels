@@ -1,0 +1,155 @@
+body {
+    min-height: 1500px;
+}
+
+div.list-container {
+    min-height: 1500px;
+    height: auto;
+}
+
+span.span-novel-name{
+    color: darkgray;
+    text-decoration: none;
+}
+
+div.novel-info {
+    width: 940px;
+    height: 400px;
+    margin: 20px auto;
+    margin-bottom: 0px;
+    border-bottom: 1px solid darkgray;
+}
+
+div.novel-image {
+    width: 210px;
+    height: 255px;
+    position: relative;
+    float: left;
+    margin-left: 10px;
+}
+
+div.novel-name, div.novel-autor-state, div.novel-des {
+    width: 700px;
+    margin-left: 225px;
+    margin-top: 5px;
+}
+
+div.novel-name {
+    height: 50px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 30px;
+    line-height: 50px;
+    font-family: 楷体;
+}
+
+div.novel-autor-state {
+    height: 30px;
+    margin-top: 0px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 15px;
+    color: black;
+}
+
+div.novel-des {
+    height: 160px;
+    margin-top: 10px;
+    font-size: 13px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border: 1px solid darkgray;
+    color: black;
+}
+
+div.novel-read-vote-like {
+    width: 925px;
+    height: 80px;
+    margin-top: 10px;
+}
+
+div.novel-read-vote-like ul li {
+    display: inline-block;
+    text-align: center;
+    line-height: 50px;
+    margin-left: 40px;
+    height: 60px;
+    line-height: 60px;
+}
+
+img.state-image {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+}
+
+span.span {
+    color: #E9FAFF;
+}
+
+div.comment-area {
+    margin: 0px 30px;
+    padding-bottom: 10px;
+}
+
+h3.comment-area-title {
+    border-bottom: 1px dashed darkgray;
+    padding-bottom: 0.4em;
+}
+
+div.comment {
+    border-bottom: 1px dashed #ccc;
+    margin-bottom: 0.5em;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+}
+
+div.reply {
+    margin-left: 2em;
+    margin-top: 0.5em;
+}
+
+div#reply_content_container {
+    border: 1px solid #d1d1d1;
+    border-bottom: none;
+    background-color: #f8f8f8;
+    overflow: hidden;
+    padding: 1em 1em 0.5em;
+
+}
+
+p#reply_title {
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 0.5em;
+}
+
+div.like {
+    color: #337ab7;
+    cursor: pointer;
+    display: inline-block;
+}
+
+div.like .active {
+    color: #f22;
+}
+
+span.username {
+    font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+    font-size: 16px;
+    color: #6d757a;
+}
+
+span.comment-time {
+    font-size: 12px;
+    color: darkgray;
+}
+
+span.reply-to {
+    font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+    font-size: 13px;
+}
+
+div.comment-text {
+    font-size: 13px;
+    margin-top: 0.5em;
+}
