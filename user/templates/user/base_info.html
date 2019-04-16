@@ -1,0 +1,42 @@
+{% extends 'user/user_info.html' %}
+
+{% block base_status %}active{% endblock %}
+
+{% block info_content %}
+	<div class="base-info">
+		<ul class="user-info-ul">
+			<li>
+				<span class="info-head">昵称</span>
+				<span class="info-body">
+					{{ user.get_nickname }}
+					<a href="{% url 'user:change_nickname' %}?from={{ request.get_full_path }}">修改昵称</a>
+				</span>
+			</li>
+			<li>
+				<span class="info-head">邮箱</span>
+				<span class="info-body">
+					{% if user.email %}
+						{{ user.email }}
+					{% else %}
+						未绑定<a href="{% url 'user:bind_email' %}?from={{ request.get_full_path }}">绑定邮箱</a>
+					{% endif %}
+				</span>
+			</li>
+			<li>
+				<span class="info-head">
+					密码
+				</span>
+				<span class="info-body">
+					<a href="{% url 'user:change_password' %}?from={{ request.get_full_path }}">修改密码</a>
+				</span>
+			</li>
+			<li>
+				<span class="info-head">上一次登录时间</span>
+				<span class="info-body">
+					{{ user.last_login|date:"Y-m-d H:n:s" }}
+				</span>
+			</li>
+			
+		</ul>
+	</div>
+{% endblock %}

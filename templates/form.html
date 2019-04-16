@@ -9,7 +9,7 @@
 {% endblock header %}
 
 {% block content %}
-	<div class="form-container">
+	<div class="container">
 		<div class="row">
 			<div class="col-xs-4 col-xs-offset-4">
 				<div class="panel panel-default">
@@ -21,11 +21,21 @@
 							{% csrf_token %}
 							{% for field in form %}
 								{% if not field.is_hidden %}
-									<label for="{{ field.id_for_label }}">
-										{{ field.label }}
-									</label>
+									<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    	{% if field.id_for_label == 'id_verification_code' %}
+	                                        <div class="input-group">
+	                                          	{{ field }}
+	                                          	<span class="input-group-btn">
+	                                             	<button id="send_code" class="btn btn-default">
+	                                              		发送验证码
+	                                          		</button>
+	                                          	</span>
+	                                        </div>
+	                                    {% else %}
+	                                        {{ field }}
+	                                    {% endif %}
 								{% endif %}
-								{{ field }}
+								
 								<p class="text-danger">{{ field.errors.as_text }}</p>
 							{% endfor %}
 							<span id="tip" class="text-danger">{{ form.non_field_errors }}</span>
@@ -45,4 +55,4 @@
 			</div>
 		</div>
 	</div>
-{% endblock content %}
+{% endblock %}

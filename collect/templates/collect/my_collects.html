@@ -1,0 +1,40 @@
+{% extends 'user/user_info.html' %}
+{% load staticfiles %}
+{% block collect_status %}active{% endblock %}
+
+{% block title %}小黑阅读站|我的消息{% endblock %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="{% static 'collect/my_collects.css' %}">
+{% endblock header%}
+
+{% block info_content %}
+	<div class="base-info">
+		<div class="row">
+			<div class="col-xs-8 col-xs-offset-2 collect">
+				<ul class="collect_records">
+					<li class="li-header">
+						<span>书名</span>
+						<span>收藏时间</span>
+						<span>操作</span>
+					</li>
+					{% for collect_record in collect_records %}
+						<li>
+							<span>
+								<a href="{% url 'novels:novel_detail' collect_record.content_object.pk %}">
+									{{ collect_record.content_object.get_name }}
+								</a>
+							</span>
+							<span>{{ collect_record.collected_time }}</span>
+							<span class="delete">
+								<a class="btn btn-danger" href="{% url 'collect:delete_collect' collect_record.pk %}">取消收藏</a>
+							</span>
+						</li>
+					{% empty %}
+						<li>暂无收藏</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+{% endblock %}

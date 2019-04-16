@@ -1,32 +1,50 @@
 {% extends 'base.html' %}
-{% block title %}个人中心{% endblock %}
+{% load staticfiles %}
+{% block title %}小黑阅读站|个人中心{% endblock %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="{% static 'user/infoStyle.css' %}">
+{% endblock header%}
+
+{% block navbar %}
+	<ul class="nav navbar-nav">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+        <li class="active">
+            <a href="{% url 'user:user_info' %}">个人中心</a>
+        </li>
+    </ul>
+{% endblock %}
 
 {% block content %}
-	<div class="row">
-		<div class="col-xs-10 col-xs-offset-1">
-			{% if user.is_authenticated %}
+	<div class="container">
+		{% if user.is_authenticated %}
+		<div class="row">
+			<div class="col-xs-10 col-xs-offset-1">
 				<h2>{{ user.username }}</h2>
-				<ul>
-					<li>
-						昵称: {{ user.get_nickname }}
-						<a href="{% url 'user:change_nickname' %}?from={{ request.get_full_path }}">修改昵称</a>
+				
+				<ul class="nav nav-tabs nav-justified">
+					<li role="presentation" class="{% block base_status %}{% endblock %}">
+						<a href="{% url 'user:user_info' %}">基本信息</a>
 					</li>
-					<li>邮箱:
-						{% if user.email %}
-							{{ user.email }}
-						{% else %}
-							未绑定<a href="{% url 'user:bind_email' %}?from={{ request.get_full_path }}">绑定邮箱</a>
-						{% endif %}
+					<li role="presentation" class="{% block collect_status %}{% endblock %}">
+						<a href="{% url 'collect:my_collects' %}">我的收藏</a>
 					</li>
-					<li>上一次登录时间:{{ user.last_login|date:"Y-m-d H:n:s" }}</li>
-					<li><a href="{% url 'user:change_password' %}?from={{ request.get_full_path }}">修改密码</a></li>
+					<li role="presentation" class="{% block message_status %}{% endblock %}">
+						<a href="{% url 'my_notifications:my_notifications' %}">我的消息</a>
+					</li>
 				</ul>
-			{% else %}
-				<span>您还没有登录，请先登录...</span>
-				<script type="text/javascript">
-					window.location.href = '{% url "user:login" %}';
-				</script>
-			{% endif %}
+				{% block info_content %}
+				{% endblock %}
+				
+			</div>
 		</div>
+		{% else %}
+			<span>您还没有登录，请先登录...</span>
+			<script type="text/javascript">
+				window.location.href = '{% url "user:login" %}';
+			</script>
+		{% endif %}
 	</div>
 {% endblock %}

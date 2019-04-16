@@ -1,0 +1,34 @@
+{% extends 'user/user_info.html' %}
+{% load staticfiles %}
+{% block message_status %}active{% endblock %}
+
+{% block title %}小黑阅读站|我的消息{% endblock %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="{% static 'my_notifications/notifications.css' %}">
+{% endblock header%}
+
+{% block info_content %}
+	<div class="base-info">
+		<div class="row">
+			<div class="col-xs-6 col-xs-offset-3 message">
+				<ul class="notifications">
+					{% for notification in request.user.notifications.all %}
+						<li class="{% if not notification.unread %}read{% endif %}">
+							[{{ notification.timesince }}之前]
+							<a href="{% url 'my_notifications:my_notification' notification.pk %}">
+								{{ notification.verb }}
+							</a>
+						</li>
+					{% empty %}
+						<li>暂无消息</li>
+					{% endfor %}
+				</ul>
+				<a class="btn btn-primary" href="{% url 'notifications:mark_all_as_read' %}?next={% url 'my_notifications:my_notifications' %}">
+					全部标记为已读
+				</a>
+				<a class="btn btn-danger" href="{% url 'my_notifications:delete_my_read_notifications' %}">删除已读消息</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

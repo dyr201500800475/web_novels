@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "index_base.html" %}
 {% load staticfiles %}
 {% block title %}小黑阅读站|{{ novel_type.type_name }}{% endblock title %}
 {% block header %}
     <link rel="stylesheet" type="text/css" href="{% static 'novels/typeStyle.css' %}"> 
 {% endblock header %}
 
-{% block content %}
+{% block content1 %}
     <div class="list-container">
         <div class="list-nav">
             <ol class="breadcrumb">
@@ -51,6 +51,8 @@
                             title="{{ novel_info.novel.novel_name }}">马上阅读</a>
                         </div>
                     </li>
+                {% empty %}
+                    <h3>暂时没有资源哦~~~</h3>
                 {% endfor %}
             </ul>
         </div>
@@ -88,4 +90,4 @@
             </ul>
         </div> 
     </div>
-{% endblock content %}
+{% endblock %}

@@ -21,6 +21,9 @@ class Novel(models.Model, ReadNumExpandMethod):
 	def get_url(self):
 		return reverse('novels:novel_detail', kwargs={'novel_pk': self.pk})
 
+	def get_name(self):
+		return self.novel_name
+
 
 class NovelInfo(models.Model):
 	novel = models.ForeignKey(Novel, on_delete=models.CASCADE)

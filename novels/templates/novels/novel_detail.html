@@ -1,17 +1,18 @@
-{% extends "base.html" %}
+{% extends "index_base.html" %}
 {% load staticfiles %}
 {% load comment_tags %}
 {% load likes_tags %}
+{% load collect_tags %}
 
 {% block title %}小黑阅读站|{{ novel.novel_name }}{% endblock title %}
 
 {% block header %}
     <link rel="stylesheet" type="text/css" href="{% static 'novels/typeStyle.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'novels/detailStyle.css' %}">
-    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
-    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 {% endblock header %}
-{% block content %}
+{% block content1 %}
     <div class="list-container">
         <div class="list-nav">
              <ol class="breadcrumb">
@@ -56,10 +57,15 @@
                     <li>
                         <a class="btn btn-success btn-lg" href="{{ novel_info.read_url }}">开始阅读</a>
                     </li>
-                    <li> <a class="btn btn-info">加入书架+</a></li>
                     <li>
-                        <div class="like" onclick="likeChange(this, '{% get_content_type novel %}',
-                            {{ novel.pk }})">
+                        <div onclick="CollectChange(this, '{% get_content_type novel %}', {{ novel.pk }})">
+                            <button id="collect" class="btn btn-info {% get_collect_status novel %}">
+                                {% get_collect_message novel %}
+                            </button>
+                        </div> 
+                    </li>
+                    <li>
+                        <div class="like "onclick="likeChange(this, '{% get_content_type novel %}', {{ novel.pk }})" >
                             <span class="glyphicon glyphicon-thumbs-up {% get_like_status novel %}"> </span>
                             <span class="liked-num">{% get_like_count novel %}</span>
                             <span>喜欢</span>
@@ -112,8 +118,7 @@
                         <div id="comment_{{ comment.pk }}" class="comment-text">
                             {{ comment.text|safe }}
                         </div>
-                        <div class="like" onclick="likeChange(this, '{% get_content_type comment %}',
-                         {{ comment.pk }})">
+                        <div class="like" onclick="likeChange(this, '{% get_content_type comment %}', {{ comment.pk }})">
                             <span class="glyphicon glyphicon-thumbs-up {% get_like_status comment %}"></span>
                             <span class="liked-num">{% get_like_count comment %}</span>
                         </div>
@@ -173,7 +178,7 @@
           </div>
         </div>
     </div>
-{% endblock content %}
+{% endblock %}
 {% block script_extends %}
     <script type="text/javascript">
         String.prototype.format = function(){
@@ -308,7 +313,43 @@
                 },
             });
         }
-
+        function CollectChange(obj, content_type, object_id){
+            var is_collect = obj.getElementsByClassName('active').length == 0
+            console.log(is_collect)
+            $.ajax({
+                url: "{% url 'collect:collect_change' %}",
+                type: 'GET',
+                data: {
+                    content_type: content_type,
+                    object_id: object_id,
+                    is_collect: is_collect,
+                },
+                cache: false,
+                success: function(data){
+                    console.log(data)
+                    if(data['status']=='SUCCESS'){
+                        // 更新收藏状态
+                        if(is_collect){
+                            $('#collect').addClass('active');
+                            $('#collect').text("已收藏");
+                        }else{
+                            $('#collect').removeClass('active');
+                            $('#collect').text("加入书架+");
+                        }
+                    }else{
+                        if(data['code']==400){
+                            $('#login_modal').modal('show');
+                        }else{
+                            alert(data['message']);
+                        }
+                        
+                    }
+                },
+                error: function(hxr){
+                    console.log(hxr)
+                },
+            });
+        }
         $("#login_medal_form").submit(function(event){
             event.preventDefault();
             $.ajax({
@@ -328,5 +369,10 @@
                 }
             });
         });
+        if(window.location.hash){
+            $('html').animate({
+                scrollTop: $(window.location.hash).offset().top - 60
+            }, 500);
+        }
     </script>
 {% endblock %}

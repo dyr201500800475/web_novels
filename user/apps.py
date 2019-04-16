@@ -1,5 +1,8 @@
 from django.apps import AppConfig
 
 
-class LoginConfig(AppConfig):
-    name = 'login'
+class UserConfig(AppConfig):
+    name = 'user'
+    def ready(self):
+    	super(UserConfig, self).ready()
+    	from . import signals

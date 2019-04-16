@@ -76,7 +76,7 @@ def register(request):
 # 进入用户个人中心
 def user_info(request):
 	context = {}
-	return render(request, 'user/user_info.html', context)
+	return render(request, 'user/base_info.html', context)
 
 # 修改昵称模块
 def change_nickname(request):
@@ -179,7 +179,7 @@ def change_password(request):
 
 # 忘记密码模块
 def forgot_password(request):
-    redirect_to = 'user:login'
+    redirect_to = request.GET.get('from', '/')
     if request.method == "POST":
         form = ForgotPasswordForm(request.POST, request=request)
         if form.is_valid():

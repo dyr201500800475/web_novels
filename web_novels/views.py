@@ -3,7 +3,6 @@ import random
 from django.shortcuts import render
 from django.contrib.contenttypes.models import ContentType
 from novels.models import Novel,NovelInfo,NovelType
-
 from likes.models import LikeCount, LikeRecord
 
 def get_novels_info(novels):

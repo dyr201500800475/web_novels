@@ -20,8 +20,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name="index"),
     path('base/', views.base, name="base"),
+    path('search/', include('search.urls')),
     path('novels/', include('novels.urls')),
     path('user/', include('user.urls')),
     path('comment/', include('comment.urls')),
     path('likes/', include('likes.urls')),
+    path('collect/', include('collect.urls')),
+    path('notifications/', include('notifications.urls', namespace="notifications")),
+    path('my_notifications/', include('my_notifications.urls')),
 ]

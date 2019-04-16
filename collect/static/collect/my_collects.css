@@ -1,0 +1,21 @@
+ul.collect_records {
+	margin-top: 50px;
+}
+
+ul.collect_records li{
+	width: 100%;
+	font-size: 18px;
+	margin-top: 10px;
+	margin-left: 5px;
+	border-bottom: 1px dashed darkgray;
+}
+
+ul.collect_records li span{
+	display: inline-block;
+	line-height: 100%;
+	width: 200px;
+}
+
+span.delete, li.li-header span {
+	text-align: center;
+}

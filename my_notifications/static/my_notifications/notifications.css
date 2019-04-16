@@ -1,0 +1,16 @@
+li.read {
+	color: #bbb;
+}
+
+li.read a{
+	color: #bbb;
+}
+
+ul.notifications {
+	margin-top: 1.5em;
+}
+
+ul.notifications li {
+	text-align: left;
+	font-size: 15px;
+}

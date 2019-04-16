@@ -1,9 +1,4 @@
-body {
-    min-height: 1500px;
-}
-
 div.list-container {
-    min-height: 1500px;
     height: auto;
 }
 
@@ -88,7 +83,7 @@ span.span {
 }
 
 div.comment-area {
-    margin: 0px 30px;
+    width: 100%;
     padding-bottom: 10px;
 }
 
@@ -131,6 +126,10 @@ div.like {
 
 div.like .active {
     color: #f22;
+}
+
+button#collect.active {
+    background-color: #337AB7!important;
 }
 
 span.username {

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load noveltype_tags %}
+{% load notifications_tags %}
+{% load staticfiles %}
+{% block title %}小黑阅读站|首页{% endblock title %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/baseStyle.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/indexStyle.css' %}">
+{% endblock header %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1">
+                <div class="logo-container">
+                    <div class="col-xs-5 logo">
+                        <img src="{% static 'image/logo.png' %}" alt="logo">
+                    </div>
+                </div>
+                <div class="main-nav">
+                    <ul class="nav-ul">
+                        <li><a href="{% url 'index' %}">首页</a></li>
+                        {% get_novel_type as novel_types %}
+                        {% for novel_type in novel_types %}
+                            <li>
+                                <a href="{% url 'novels:type' novel_type.pk %}">
+                                    {{ novel_type.type_name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        <li class="active"><a href="{% url 'user:user_info' %}">个人中心</a></li>
+                        <li><a href="http://www.baidu.com">热门排行</a></li>
+                    </ul>
+                </div>
+                {% block content1 %}
+                {% endblock %}
+            </div>
+        </div>   
+    </div>
+{% endblock %}

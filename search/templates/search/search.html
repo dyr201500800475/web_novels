@@ -1,0 +1,92 @@
+{% extends "index_base.html" %}
+{% load staticfiles %}
+{% block title %}小黑阅读站|搜索结果{% endblock title %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{% static 'novels/typeStyle.css' %}"> 
+{% endblock header %}
+
+{% block content1 %}
+    <div class="list-container">
+        <div class="list-nav">
+            <ol class="breadcrumb">
+                <li>
+                    <span class="glyphicon glyphicon-home"></span>
+                    <a href="{% url 'index' %}">首页</a>
+                </li>
+                <li>
+                    搜索"{{ keywords }}"结果如下:
+                </li>
+            </ol>       
+        </div>
+        <div class="list-content">
+            <ul class="ul-list">
+                {% for novel_info in novels_info %}
+                    <li class="novels">
+                        <a target="_blank" href="{% url 'novels:novel_detail' novel_info.novel.pk %}" title="{{ novel_info.novel.novel_name }}">
+                            <img src="{{ novel_info.image }}" class="novel-image"
+                                 onerror="this.src='{% static "image/nocover.jpg" %}'">
+                        </a>
+                        <img src="
+                            {% if novel_info.state == '连载' %}
+                            {% static 'image/only2.png' %}
+                            {% else %}
+                            {% static 'image/only.png' %}
+                            {% endif %}"
+                             class="state-image">
+                        <div class="novel-info">
+                            <a target="_blank" href="{% url 'novels:novel_detail' novel_info.novel.pk %}" title="{{ novel_info.novel.novel_name }}" 
+                            class="novel-name">
+                                {{ novel_info.novel.novel_name }}
+                            </a>
+                            <p class="novel-author">
+                                作者：<a title="{{ novel_info.author }}">{{ novel_info.author }}</a>
+                            </p>
+                            <span class="novel-des" title="{{ novel_info.description }}">
+                                {{ novel_info.description }}
+                            </span>
+                            <a class="btn btn-primary readTo" target="_blank" 
+                            href="{% url 'novels:novel_detail' novel_info.novel.pk %}" 
+                            title="{{ novel_info.novel.novel_name }}">马上阅读</a>
+                        </div>
+                    </li>
+                {% empty %}
+                    <h3>没有结果哦~~~</h3>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="paginator">
+            <ul class="pagination">
+                <li>
+                    {% if page_of_novels.has_previous %}
+                        <a href="{{ url }}&page={{ page_of_novels.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    {% else %}
+                        <span aria-hidden="true">&laquo;</span>
+                    {% endif %}                 
+                </li>
+                    {% for page_num in page_range %}
+                        {% if page_num == page_of_novels.number %}
+                            <li class="active"><span>{{ page_num }}</span></li>
+                        {% else %}
+                            {% if page_num == '...' %}
+                                <li><span>{{ page_num }}</span></li>
+                            {% else %}
+                                <li><a href="{{ url }}&page={{ page_num }}">{{ page_num }}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                <li>
+                    {% if page_of_novels.has_next %}
+                        <a href="{{ url }}&page={{ page_of_novels.next_page_number }}" 
+                        aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    {% else %}
+                        <span aria-hidden="true">&raquo;</span>
+                    {% endif %}
+                </li>
+            </ul>
+        </div> 
+    </div>
+{% endblock %}

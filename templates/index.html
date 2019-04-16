@@ -1,10 +1,12 @@
-{% extends "base.html" %}
+{% extends "index_base.html" %}
+{% load noveltype_tags %}
+{% load notifications_tags %}
 {% load staticfiles %}
 {% block title %}小黑阅读站|首页{% endblock title %}
 {% block header %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/indexStyle.css' %}">
 {% endblock header %}
-{% block content %}
+{% block content1 %}
     <div class="recommend-container">
         <ul class="recommend-ul">
             {% for novel_info in novels_info %}
@@ -157,10 +159,7 @@
             </div>
         </div>
     </div>
-    <div class="footer">
-        @小黑你好
-    </div>
-{% endblock content %}
+{% endblock %}
 
 {% block script_extends %}
     <script>

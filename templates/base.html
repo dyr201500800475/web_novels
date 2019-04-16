@@ -1,41 +1,65 @@
 {% load staticfiles %}
 {% load noveltype_tags %}
+{% load notifications_tags %}
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}小黑阅读站{% endblock title %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/baseStyle.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">  
     <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'notifications/notify.js' %}"></script>
     {% block header %}{% endblock header %}
 </head>
 <body>
-    <div class="navbar navbar-default" role="navigation">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="{% url 'index' %}">
-                    小黑阅读站
-                </a>
-                <button class="navbar-toggle collapsed" data-toggle="collapse" 
-                data-target="navbar-collapse">
+                <a class="navbar-brand" href="{% url 'index' %}">小黑阅读站</a>
+
+                <button class="navbar-toggle collapsed"  data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
             </div>
             <div id="navbar-collapse" class="collapse navbar-collapse">
+                {% block navbar %}
+                {% endblock %}
                 <ul class="nav navbar-nav navbar-right">
+                    <form action="{% url 'search:search' %}" class="navbar-form navbar-left search" method="GET">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search_content" 
+                            placeholder="请输入书名或作者">
+                            <span class="input-group-btn">
+                                <input class="btn btn-default" type="submit" value="搜索" >
+                            </span>
+                        </div>
+                    </form>
                     {% if not user.is_authenticated %}      
-                        <li><a href="{% url 'user:login' %}?from={{ request.get_full_path }}">登录</a></li>
-                        <li><a href="{% url 'user:register' %}?from={{ request.get_full_path }}">注册</a> </li>
+                        <li>
+                            <a href="{% url 'user:login' %}?from={{ request.get_full_path }}">
+                                登录
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'user:register' %}?from={{ request.get_full_path }}">   注册
+                            </a> 
+                        </li>
                     {% else %}
+                        {% notifications_unread as unread_count %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" 
                             role="button">
                                 {% if user.has_nickname %}
-                                    {{ user.username }}({{ user.get_nickname }}) 
+                                    {{ user.get_nickname }}
+                                    <span class="badge unread-count live_notify_badge">
+                                        {% if unread_count > 0 %}{{ unread_count }}{% endif %}
+                                    </span>
                                 {% else %}
                                     {{ user.username }} 
                                 {% endif %}
@@ -43,7 +67,14 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'user:user_info' %}">个人中心</a></li>
-                                <li><a href="{% url 'user:change_password' %}?from={{ request.get_full_path }}">修改密码</a></li>
+                                <li>
+                                    <a href="{% url 'my_notifications:my_notifications' %}">
+                                        我的消息
+                                        <span class="badge unread-count live_notify_badge">
+                                            {% if unread_count > 0 %}{{ unread_count }}{% endif %}
+                                        </span>
+                                    </a>
+                                </li>
                                 {% if user.is_staff or user.is_superuser %}
                                     <li><a href="{% url 'admin:index' %}">后台管理</a></li>
                                 {% endif %}
@@ -57,41 +88,55 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-10 col-xs-offset-1">
-                <div class="search-container">
-                    <div class="logo">
-                        <img src="{% static 'image/logo.png' %}" alt="logo">
-                    </div>
-                    <div class="search-content">
-                        <form class="navbar-form navbar-left">
-                            <div class="form-group">
-                                <input type="text" class="form-control" 
-                                placeholder="请输入书名或作者">
-                            </div>
-                            <button type="submit" class="btn btn-default">搜索</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="main-nav">
-                    <ul class="nav-ul">
-                        <li><a href="{% url 'index' %}">首页</a></li>
-                        {% get_novel_type as novel_types %}
-                        {% for novel_type in novel_types %}
-                            <li>
-                                <a href="{% url 'novels:type' novel_type.pk %}">{{ novel_type.type_name }}</a>
-                            </li>
-                        {% endfor %}
-                        <li><a href="{% url 'user:user_info' %}">个人中心</a></li>
-                        <li><a href="http://www.baidu.com">热门排行</a></li>
-                    </ul>
-                </div>
-                {% block content %}
-                {% endblock content %}
-            </div>
-        </div>   
+    {% block content %}
+    {% endblock %}
+    <!-- footer -->
+    <div class="footer">
+        <div class="website-info">
+            <p>小黑阅读站 小黑你好么么哒 版权所有</p>
+            <p>意见反馈或联系我（870850834@qq.com）</p>
+        </div>
     </div>
-    {% block script_extends %}{% endblock %}
+    <script type="text/javascript">
+        //底部栏置底
+        //窗体改变大小事件
+        $(window).resize(function(){
+            //正文高度
+            var body_height = $(document.body).outerHeight(true);
+            //底部元素高度
+            var bottom_height = $("#footer").outerHeight(true);
+            //浏览器页面高度
+            var window_height = $(window).height();
+            //判断并调整底部元素的样式
+            if($(".footer").hasClass('page-bottom')){
+                //若包含有page-bottom类，就应用了position设置
+                //当position为absolute时，body高度不包含这个元素
+                //所以页面高度需要判断body和footer之和若小于浏览器窗口
+                //则移除样式，让footer自然跟随在正文后面
+                if(body_height + bottom_height >= window_height){
+                    $(".footer").removeClass('page-bottom');
+                }
+            }else{
+                //若没有page-bottom类，body高度包含footer
+                //判断body高度小于浏览器时，则悬浮于底部
+                if(body_height < window_height){
+                    $(".footer").addClass('page-bottom');
+                }
+            }
+        });
+        //页面加载时，模拟触发一下resize事件
+        $(window).trigger('resize');
+        
+        //自定义实时获取未读消息
+        function my_special_notification_callback(data){
+            unread_count = data['unread_count'];
+            if (unread_count == 0) {
+                unread_count = '';
+            }
+            $('.live_notify_badge').text(unread_count);
+        }
+    </script>
+    {% register_notify_callbacks callbacks='my_special_notification_callback' %}
+    {% block script_extends %}{% endblock %}  
 </body>
 </html>

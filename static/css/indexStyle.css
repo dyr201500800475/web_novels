@@ -255,11 +255,3 @@ span.update-title, span.like-title {
     line-height: 50px;
     margin-left: 5px;
 }
-
-div.footer {
-    border-top: 1px dashed darkgray;
-    height: 50px; 
-    margin-top: 20px;
-    text-align: center;
-    color: darkgray;
-}
